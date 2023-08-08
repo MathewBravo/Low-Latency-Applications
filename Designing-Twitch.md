@@ -8,7 +8,7 @@ Unlike video playback streaming requires the content of videos to be delivered i
 
 The stored VODs within Twitch may utilize an object storage system like Amazon S3 and a CDN like CloudFront. The video is received through an RTMP (Real-Time Messaging Protocol) and then transcoded. Transcoding is the process in which the video is decoded from one format into various other formats like various resolutions and bitrates to help better support various network connection strengths and connected devices.  
 
-_Note: Along wit Transcoding, there are also the processes of Transmuxing where deliver format changes without any changes to encoding, and Transrating where the bitrate is changed._
+_Note: Along with Transcoding, there are also the processes of Transmuxing where deliver format changes without any changes to encoding, and Transrating where the bitrate is changed._
 
 ## Why Video Streams Lag
 
@@ -29,3 +29,21 @@ _Note: Along wit Transcoding, there are also the processes of Transmuxing where 
 
 - Encoding
    -  Video encoding translates raw video data into a format suitable for streaming over the internet. The complexity of the codec, the quality settings, and the efficiency of the encoder hardware/software play a role in this latency. For instance, hardware-accelerated encoding might be faster than software-based encoding. Similarly, encoding at higher resolutions and bit rates may also take more time, adding to the delay.
+
+## How to Stream With Low Latency
+
+As mentioned earlier RTMP and the related RTSP (S = Streaming, else same), are two examples of non-http protocols. RTSP works on the application layer and comes equipped with pausing and capabilities to support multiple data streams. It has however fallen out of favour since it is incompatible with HTTP and unusable by web-based streaming applications. RTMP was the gold standard once upon a time until recently when its scaling issues were exposed and it began to be replaced by more modern solutions. 
+
+These more modern solutions come in the form of HTTP-based protocols. HLS, HTTP Live Streaming, use segmentation and CDN / web services to provide low latency live streaming applications that remain feature rich while still scaling better than RTMP. DASH, Dynamic Adaptive Streaming over HTTP is another such protocol that works in a very similar way. These protocols do come with minimum latency, however, equal to the amount of time a segment of video represents since for a segment to be played the entire segment must first be received. 
+
+The new standard is WebRTC. This peer-to-peer protocol allows for millisecond latency and has incredible browser support.   
+## Why Twitch uses RTMP and HLS
+
+As I've talked about elsewhere there are Latency Sensitive Applications and Latency Critical Applications. Twitch finds itself falling into the first grouping. 
+
+Twitch utilizes RTMP for video ingest, which allows support for ABS (Adaptive Bitrate Streaming) allowing streamers to adjust the quality of their streams based on their network conditions. Whilst also utilizing HLS for to-viewer streaming.HLS is more scalable, works well with CDNs, is supported by virtually all modern devices, and allows for adaptive bitrate streaming on the viewer's side. 
+
+But why not WebRTC? WebRTC is designed for real-time communications and is primarily used for video calls, video conferences, and some live streaming scenarios. It offers ultra-low latency but has its challenges in scalability for large audiences, which makes it less ideal for platforms like Twitch that cater to massive concurrent viewerships. However, platforms that prioritize ultra-low latency, like some esports broadcasts or interactive streams, might look into WebRTC or similar solutions.
+
+In summary, Twitch uses RTMP for stream ingest, and other protocols like HLS for delivering those streams to a wide audience. This hybrid approach leverages the strengths of each protocol instead of bearing the negatives of relying on a single solution to the problem. 
+
