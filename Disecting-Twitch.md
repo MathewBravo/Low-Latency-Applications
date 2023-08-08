@@ -1,4 +1,4 @@
-# Designing Twitch to Understand Low Latency Applications
+# Disecting Twitch to Understand Low Latency Applications
 
 > Twitch is an interactive live streaming service for content spanning gaming, entertainment, sports, music, and more.
 
