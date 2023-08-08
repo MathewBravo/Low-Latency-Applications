@@ -1,4 +1,4 @@
-# Requirements for Latency-Sensitive Applications
+# Latency-Sensitive Applications
 
 ### What is Latency?
 
